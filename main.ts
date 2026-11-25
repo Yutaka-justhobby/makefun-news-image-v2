@@ -217,27 +217,36 @@ function drawScene(kind: string, x: number, y: number, w: number, h: number): vo
     fillCircle(x + 60, base - 46, 6, ORANGE);
   } else if (kind === "chip") {
     fillRect(x, y, w, h, [8, 40, 26]);
-    const s = Math.floor(Math.min(w, h) * 0.42);
+    const s = Math.floor(Math.min(w, h) * 0.55);
     const sx = cx - Math.floor(s / 2);
-    const sy = y + 8;
+    const sy = y + 6;
     fillRect(sx, sy, s, s, GREEN);
     fillRect(sx + 8, sy + 8, s - 16, s - 16, [20, 90, 60]);
     for (let i = 0; i < 5; i++) {
       fillRect(sx + 4 + i * Math.floor(s / 5), sy - 6, 3, 6, GOLD);
       fillRect(sx + 4 + i * Math.floor(s / 5), sy + s, 3, 6, GOLD);
     }
-    drawLine(x + 8, y + h - 14, x + Math.floor(w * 0.35), y + h - 30, GOLD);
-    drawLine(x + Math.floor(w * 0.35), y + h - 30, x + Math.floor(w * 0.62), y + h - 44, GOLD);
-    drawLine(x + Math.floor(w * 0.62), y + h - 44, x + w - 10, y + h - 58, GOLD);
+    // Rising chart, drawn 2px thick so it reads at tile size.
+    const pts: [number, number][] = [
+      [x + 8, y + h - 14], [x + Math.floor(w * 0.35), y + h - 30],
+      [x + Math.floor(w * 0.62), y + h - 44], [x + w - 10, y + h - 58],
+    ];
+    for (let i = 0; i + 1 < pts.length; i++) {
+      drawLine(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], GOLD);
+      drawLine(pts[i][0], pts[i][1] + 1, pts[i + 1][0], pts[i + 1][1] + 1, GOLD);
+    }
     fillCircle(x + w - 10, y + h - 58, 4, YELLOW);
   } else if (kind === "satellite") {
     fillRect(x, y, w, h, [8, 14, 32]);
     for (let i = 0; i < 8; i++) fillRect(x + 6 + ((i * 37) % (w - 12)), y + 6 + ((i * 23) % 30), 2, 2, WHITE);
-    fillCircle(cx, y + h + 30, Math.floor(w * 0.62), [52, 110, 170]);
-    fillRect(cx - 26, y + 12, 52, 16, GREY);
-    fillRect(cx - 44, y + 16, 16, 8, BLUE);
-    fillRect(cx + 28, y + 16, 16, 8, BLUE);
-    drawLine(cx - 10, y + 30, cx - 30, y + 52, GOLD);
+    // Earth as a disc rising from the bottom edge, not a giant circle.
+    fillCircle(cx, y + h + 12, 48, [52, 110, 170]);
+    fillCircle(cx - 12, y + h - 16, 8, GREEN);
+    fillCircle(cx + 14, y + h - 8, 6, GREEN);
+    fillRect(cx - 26, y + 10, 52, 16, GREY);
+    fillRect(cx - 44, y + 14, 16, 8, BLUE);
+    fillRect(cx + 28, y + 14, 16, 8, BLUE);
+    drawLine(cx - 10, y + 28, cx - 30, y + 50, GOLD);
   } else if (kind === "capitol") {
     fillRect(x, y, w, h, [30, 44, 74]);
     fillRect(x + 10, y + h - 18, w - 20, 18, [220, 220, 215]);
@@ -249,19 +258,20 @@ function drawScene(kind: string, x: number, y: number, w: number, h: number): vo
     skySea(x, y, w, h);
     fillRect(x + 10, y + Math.floor(h * 0.55), w - 20, 18, [90, 40, 36]);
     fillRect(x + Math.floor(w * 0.6), y + Math.floor(h * 0.55) - 14, 18, 14, [120, 120, 125]);
-    fillCircle(x + 20, y + Math.floor(h * 0.42), 5, DARK);
-    fillCircle(x + 34, y + Math.floor(h * 0.38), 4, DARK);
-    fillCircle(x + 48, y + Math.floor(h * 0.42), 5, DARK);
-    fillCircle(x + Math.floor(w * 0.82), y + Math.floor(h * 0.7), 6, ORANGE);
-    fillCircle(x + Math.floor(w * 0.82), y + Math.floor(h * 0.7), 3, YELLOW);
+    // Mines float in the sea below the hull, not in the sky.
+    fillCircle(x + 20, y + Math.floor(h * 0.8), 5, DARK);
+    fillCircle(x + 34, y + Math.floor(h * 0.76), 4, DARK);
+    fillCircle(x + 48, y + Math.floor(h * 0.8), 5, DARK);
+    fillCircle(x + Math.floor(w * 0.82), y + Math.floor(h * 0.72), 6, ORANGE);
+    fillCircle(x + Math.floor(w * 0.82), y + Math.floor(h * 0.72), 3, YELLOW);
   } else if (kind === "gaza") {
     fillRect(x, y, w, h, [44, 40, 36]);
     fillRect(x + 8, y + h - 40, 30, 40, [90, 84, 76]);
     fillRect(x + 44, y + h - 56, 34, 56, [80, 74, 66]);
     fillRect(x + 84, y + h - 30, 26, 30, [96, 90, 82]);
-    fillCircle(x + 60, y + h - 62, 10, [150, 150, 150]);
-    fillCircle(x + 74, y + h - 70, 7, [170, 170, 170]);
-    fillCircle(x + 30, y + h - 46, 7, ORANGE);
+    fillCircle(x + 60, y + h - 62, 7, [150, 150, 150]);
+    fillCircle(x + 74, y + h - 68, 5, [170, 170, 170]);
+    fillCircle(x + 30, y + h - 46, 5, ORANGE);
   } else if (kind === "tower") {
     fillRect(x, y, w, h, [24, 30, 52]);
     fillRect(cx - 14, y + 6, 28, h - 6, [120, 128, 150]);
@@ -394,6 +404,20 @@ function drawScene(kind: string, x: number, y: number, w: number, h: number): vo
     fillPoly([[x + 18, y + h - 16], [x + 18, y + h - 6], [x + 30, y + h - 16]], [235, 230, 220]);
     drawText(x + 16, y + 16, "IF (X)", 2, [200, 80, 50]);
     drawText(x + 16, y + 34, "FIX()", 2, [40, 90, 160]);
+  } else if (kind === "warning") {
+    fillRect(x, y, w, h, [30, 26, 20]);
+    fillPoly([[cx, y + 8], [cx + 26, y + h - 8], [cx - 26, y + h - 8]], YELLOW);
+    fillRect(cx - 2, y + 20, 4, 16, DARK);
+    fillRect(cx - 2, y + 40, 4, 4, DARK);
+  } else if (kind === "chart") {
+    fillRect(x, y, w, h, [16, 28, 40]);
+    const bw = Math.floor((w - 24) / 4);
+    fillRect(x + 8, y + h - 20, bw, 12, RED);
+    fillRect(x + 12 + bw, y + h - 30, bw, 22, ORANGE);
+    fillRect(x + 16 + bw * 2, y + h - 40, bw, 32, GOLD);
+    fillRect(x + 20 + bw * 3, y + h - 52, bw, 44, GREEN);
+    drawLine(x + 8, y + h - 10, x + w - 8, y + h - 10, WHITE);
+    drawLine(x + 8, y + 8, x + w - 8, y + 8, [120, 130, 150]);
   } else {
     fillRect(x, y, w, h, PANEL2);
     fillCircle(cx, cy, Math.floor(Math.min(w, h) * 0.3), GOLD);
@@ -414,27 +438,27 @@ const HEROES: Story[] = [
 ];
 const GRID: Story[] = [
   { tag: "EUROPE", scene: "satellite", headline: "NATO VOWS SPACE DEFENCE" },
-  { tag: "USA", scene: "capitol", headline: "DEMOCRATS WIN RECORD HOUSE MAJORITY", detail: "BIGGEST SINCE 1992" },
+  { tag: "USA", scene: "capitol", headline: "DEMOCRATS WIN HOUSE MAJORITY", detail: "BIGGEST SINCE 1992" },
   { tag: "MIDEAST", scene: "tanker", headline: "TANKERS HIT MINES IN HORMUZ STRAIT" },
-  { tag: "MIDEAST", scene: "gaza", headline: "HAMAS SECURITY CHIEF KILLED IN GAZA", detail: "ISRAELI STRIKE DESPITE CEASEFIRE" },
+  { tag: "MIDEAST", scene: "gaza", headline: "HAMAS CHIEF KILLED IN GAZA", detail: "ISRAELI STRIKE DESPITE CEASEFIRE" },
   { tag: "MIDEAST", scene: "tower", headline: "HOUTHI DRONE HITS RIYADH TOWER", detail: "11 HURT; SECOND STRIKE IN A WEEK" },
-  { tag: "ASIA", scene: "jet", headline: "N. KOREAN JET BREACHES SOUTH AIRSPACE", detail: "ISLANDERS TOLD TO TAKE SHELTER" },
+  { tag: "ASIA", scene: "jet", headline: "NORTH KOREA JET IN SOUTH AIRSPACE", detail: "AIRSPACE BREACH; SHELTERS ORDERED" },
   { tag: "ASIA", scene: "quake", headline: "NEPAL QUAKE 5.6 NEAR CHINA BORDER" },
   { tag: "WORLD", scene: "globe", headline: "14 NATIONS BACK ICJ ROHINGYA RULING", detail: "MYANMAR GENOCIDE CASE" },
-  { tag: "WORLD", scene: "ai", headline: "UN CHIEF SEEKS AI-RISK PACT IN A YEAR" },
+  { tag: "WORLD", scene: "ai", headline: "UN CHIEF SEEKS AI-RISK PACT", detail: "FRAMEWORK SOUGHT WITHIN A YEAR" },
   { tag: "USA", scene: "health", headline: "MEASLES KILLS 9TH IN PENNSYLVANIA", detail: "OUTBREAK SPANS 46 COUNTIES" },
   { tag: "ASIA", scene: "space", headline: "CHINA OPENS SPACE STATION TO PAKISTAN", detail: "FIRST FOREIGN ASTRONAUT ON SHENZHOU-24" },
   { tag: "AMERICAS", scene: "bomb", headline: "CAR BOMB BLASTS COLOMBIA CITY", detail: "BUILDINGS DESTROYED IN VILLAVICENCIO" },
-  { tag: "MIDEAST", scene: "bus", headline: "UAE BUS CRASH KILLS 11", detail: "COACH AND TRUCK COLLIDE IN RAS AL KHAIMAH" },
-  { tag: "USA", scene: "car", headline: "HONDA RECALLS 810,000 VEHICLES IN US", detail: "AIRBAG RUPTURE RISK" },
-  { tag: "USA", scene: "train", headline: "AMTRAK TRAIN DERAILS IN LOUISIANA", detail: "5 HURT AFTER HITTING TRUCK" },
+  { tag: "MIDEAST", scene: "bus", headline: "UAE BUS CRASH KILLS 11", detail: "BUS-TRUCK CRASH IN RAS AL KHAIMAH" },
+  { tag: "USA", scene: "car", headline: "HONDA RECALLS 810,000 VEHICLES", detail: "AIRBAG RUPTURE RISK" },
+  { tag: "USA", scene: "train", headline: "AMTRAK TRAIN DERAILS", detail: "5 HURT IN LOUISIANA CRASH" },
   { tag: "AFRICA", scene: "fire", headline: "SIX ZANZIBAR HOTELS BURN; 180 FLEE" },
-  { tag: "EUROPE", scene: "museum", headline: "ACROPOLIS MUSEUM REOPENS AFTER 7 YEARS" },
-  { tag: "USA", scene: "flag", headline: "VANCE LOBBIED NVIDIA BOARD FOR HUANG", detail: "AT TRUMP'S BEHEST" },
+  { tag: "EUROPE", scene: "museum", headline: "ACROPOLIS MUSEUM REOPENS", detail: "AFTER 7-YEAR RESTORATION" },
+  { tag: "USA", scene: "flag", headline: "VANCE LOBBIED NVIDIA BOARD", detail: "AT TRUMP'S BEHEST, FOR HUANG" },
   { tag: "WORLD", scene: "tariff", headline: "US PLANS FRESH TARIFF HIKES", detail: "CHINA AND EU IN LINE" },
-  { tag: "TECH", scene: "cyber", headline: "AI STAFF FEAR NEW MODELS TOO DANGEROUS", detail: "OPENAI, ANTHROPIC WORKERS WARN" },
-  { tag: "USA", scene: "cyber", headline: "CIA AND ODNI HIT BY MYSTERY CYBERATTACK" },
-  { tag: "USA", scene: "flag", headline: "TRUMP: US MAY STILL TAKE NVIDIA STAKE" },
+  { tag: "TECH", scene: "warning", headline: "AI STAFF FEAR NEW MODELS", detail: "TOO DANGEROUS TO RELEASE, THEY WARN" },
+  { tag: "USA", scene: "cyber", headline: "CIA, ODNI HIT BY CYBERATTACK", detail: "MYSTERY ATTACK REPORTED" },
+  { tag: "USA", scene: "chart", headline: "TRUMP: US MAY STILL TAKE NVIDIA STAKE" },
   { tag: "USA", scene: "plant", headline: "TRUMP HALTS IOWA PLANT DETONATION", detail: "PENDING COURT RULING" },
   { tag: "TECH", scene: "claude", headline: "ANTHROPIC LAUNCHES CLAUDE SHIP", detail: "CODE REVIEW TOOL FOR DEVELOPERS" },
 ];
@@ -471,10 +495,14 @@ function main(): void {
     fillRect(x + 6, hy + 180, 64, 16, RED);
     drawText(x + 10, hy + 183, s.tag, 1, WHITE);
     const lines = wrapText(s.headline, hw - 16, 3);
+    if (lines.length > 3) throw new Error("hero headline wraps to " + lines.length + " lines: " + s.headline);
     for (let li = 0; li < lines.length; li++) {
       drawText(x + 8, hy + 204 + li * 19, lines[li], 3, INK);
     }
-    if (s.detail) drawText(x + 8, hy + 204 + lines.length * 19 + 2, s.detail, 1, GOLD);
+    if (s.detail) {
+      if (textWidth(s.detail, 1) > hw - 16) throw new Error("hero detail too wide: " + s.detail);
+      drawText(x + 8, hy + 204 + lines.length * 19 + 2, s.detail, 1, GOLD);
+    }
   }
 
   // Grid: 6 x 4 tiles
@@ -492,11 +520,13 @@ function main(): void {
       fillRect(x + 4, y + 70, 52, 12, RED);
       drawText(x + 7, y + 72, s.tag, 1, WHITE);
       const lines = wrapText(s.headline, tw - 10, 2);
-      for (let li = 0; li < Math.min(lines.length, 2); li++) {
+      if (lines.length > 2) throw new Error("tile headline wraps to " + lines.length + " lines: " + s.headline);
+      for (let li = 0; li < lines.length; li++) {
         drawText(x + 5, y + 86 + li * 13, lines[li], 2, INK);
       }
       if (s.detail) {
         const d = wrapText(s.detail, tw - 10, 1);
+        if (d.length > 1) throw new Error("tile detail wraps to " + d.length + " lines: " + s.detail);
         if (d.length > 0) drawText(x + 5, y + 86 + Math.min(lines.length, 2) * 13 + 1, d[0], 1, GOLD);
       }
     }
